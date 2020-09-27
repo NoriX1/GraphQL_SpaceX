@@ -11,6 +11,10 @@ const MissionKey = () => {
         <span className="px-3 mr-2 bg-danger"></span>
         = Fail
       </p>
+      <p>
+        <span className="px-3 mr-2 bg-warning"></span>
+        = Not launched yet
+      </p>
     </div>
   );
 }

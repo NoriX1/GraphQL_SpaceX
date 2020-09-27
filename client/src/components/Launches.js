@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { useQuery, gql } from '@apollo/client';
 import LaunchItem from './LaunchItem';
 import MissionKey from './MissionKey';
 
@@ -15,37 +14,30 @@ const LAUNCHES_QUERY = gql`
   }
 `;
 
-class Launches extends React.Component {
-  render() {
-    return (
-      <Fragment>
-        <h1 className="display-4 my-3">Launches</h1>
-        <MissionKey />
-        <Query query={LAUNCHES_QUERY}>
-          {
-            ({ loading, error, data }) => {
-              if (loading) return <h4>Loading...</h4>
-              if (error) console.log(error);
-              return (
-                <Fragment>
-                  {
-                    data.launches.map(launch => {
-                      return (
-                        <LaunchItem
-                          key={launch.flight_number}
-                          launch={launch}
-                        />
-                      );
-                    })
-                  }
-                </Fragment>
-              );
-            }
-          }
-        </Query>
-      </Fragment>
-    );
+const Launches = () => {
+  const { loading, error, data } = useQuery(LAUNCHES_QUERY);
+
+  const renderLaunches = () => {
+    if (loading) return <h4>Loading...</h4>;
+    if (error) return <h4>{error}</h4>;
+
+    return data.launches.map(launch => {
+      return (
+        <LaunchItem
+          key={launch.flight_number}
+          launch={launch}
+        />
+      );
+    }).reverse();
   }
+
+  return (
+    <Fragment>
+      <h1 className="display-4 my-3">Launches</h1>
+      <MissionKey />
+      {renderLaunches()}
+    </Fragment>
+  );
 }
 
 export default Launches;

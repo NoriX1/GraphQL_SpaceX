@@ -10,7 +10,8 @@ const LaunchItem = ({ launch: { flight_number, mission_name, launch_date_local, 
         <div className="col-md-9">
           <h4>Mission: <span className={classNames({
             'text-success': launch_success,
-            'text-danger': !launch_success
+            'text-danger': !launch_success && launch_success !== null,
+            'text-warning': launch_success === null
           })}>{mission_name}</span></h4>
           <p>Date: <Moment format="DD.MM.YYYY HH:mm">{launch_date_local}</Moment></p>
         </div>
